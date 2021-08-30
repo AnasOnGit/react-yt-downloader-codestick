@@ -61,16 +61,24 @@ function useQuery() {
 function App() {
   const classes = useStyles();
   let history = useHistory();
+  const parsedUrl = new URL(window.location);
    let query = useQuery();
   // states
   const [url,setUrl] = useState("")
     const [loading,setLoading] = useState(true);
    // effect
     useEffect(()=>{
+      if (parsedUrl.searchParams.get("text") != null) {
+        setUrl(parsedUrl.searchParams.get("text"))
+      }
       if(window.location.pathname === "/"){
           setUrl("")
       }else{
+
         setUrl(query.get("url"))
+        if (parsedUrl.searchParams.get("text") != null) {
+          setUrl(parsedUrl.searchParams.get("text"))
+        }
       }
 
     },[window.location.pathname])
@@ -119,7 +127,6 @@ function App() {
   </a>
   <div id="container-262d89e83f48f4f114bffdc40c7395b4"></div>
       <Seo />
-      
     </div>
   );
 }

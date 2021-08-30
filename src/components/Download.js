@@ -41,12 +41,17 @@ export default function Download({loading,setLoading}){
     const [formats,setFormats] = useState()
     const [audioFormats,setAudioFormats] = useState();
     let rl = "Rick Astley - Never Gonna Give You Up (Official Music Video)"
-
+    const parsedUrl = new URL(window.location);
     // effect
     useEffect(()=>{
-          setUrl(query.get("url"))
+          
+          if (parsedUrl.searchParams.get("text") != null) {
+            setUrl(parsedUrl.searchParams.get("text"))
+          }else{
+            setUrl(query.get("url"))
+          }
 
-        axios.get(`https://powerful-forest-52012.herokuapp.com/video?videoId=${query.get("url")}`)
+        axios.get(`https://powerful-forest-52012.herokuapp.com/video?videoId=${parsedUrl.searchParams.get("text") !== null ? parsedUrl.searchParams.get("text") : query.get("url")}`)
         .then(res=>{
             setTitle(res.data.videoDetails.title)
             setThumbnail(res.data.videoDetails.thumbnails[res.data.videoDetails.thumbnails.length-1].url)
