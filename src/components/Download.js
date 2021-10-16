@@ -51,14 +51,17 @@ export default function Download({loading,setLoading}){
             setUrl(query.get("url"))
           }
 
+        // axios.get(`http://localhost:4000/video?videoId=${parsedUrl.searchParams.get("text") !== null ? parsedUrl.searchParams.get("text") : query.get("url")}`)
         axios.get(`https://powerful-forest-52012.herokuapp.com/video?videoId=${parsedUrl.searchParams.get("text") !== null ? parsedUrl.searchParams.get("text") : query.get("url")}`)
         .then(res=>{
             setTitle(res.data.videoDetails.title)
             setThumbnail(res.data.videoDetails.thumbnails[res.data.videoDetails.thumbnails.length-1].url)
+            // console.log(res.data.formats)
             setFormats(res.data.formats)
-            console.log(res.data.videoDetails.thumbnails[res.data.videoDetails.thumbnails.length-1])
+            // console.log(res.data.videoDetails.thumbnails[res.data.videoDetails.thumbnails.length-1])
             setLoading(false)
         })
+        // axios.get(`http://localhost:4000/audio?videoId=${query.get("url")}`)
         axios.get(`https://powerful-forest-52012.herokuapp.com/audio?videoId=${query.get("url")}`)
         .then(res=>{
          
@@ -85,7 +88,7 @@ export default function Download({loading,setLoading}){
              <p>Video</p>     
             <div className={classes.DownloadSection}>
               {formats && formats.map((format,index)=>(
-                 format.qualityLabel === null ? "" : <Chip label={format.qualityLabel} onClick={()=>{downloadFile(format.itag,format.hasVideo)}} key={index} color="primary" style={{margin:"0px 7px 7px 0px",cursor:"pointer"}} />
+                 format.qualityLabel === null ? "" : format.hasAudio === true ? <Chip label={format.qualityLabel} onClick={()=>{downloadFile(format.itag,format.hasVideo)}} key={index} color="primary" style={{margin:"0px 7px 7px 0px",cursor:"pointer"}} /> : ""
               ))}
             </div>
             <p>Audio</p>
